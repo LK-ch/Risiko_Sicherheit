@@ -1,0 +1,588 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Schweizer Versicherungen - Lernspiel</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .game-container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            max-width: 800px;
+            width: 100%;
+            padding: 40px;
+        }
+
+        h1 {
+            color: #333;
+            text-align: center;
+            margin-bottom: 10px;
+            font-size: 2em;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 1.1em;
+        }
+
+        .score-board {
+            display: flex;
+            justify-content: space-around;
+            margin-bottom: 30px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 10px;
+        }
+
+        .score-item {
+            text-align: center;
+        }
+
+        .score-label {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 5px;
+        }
+
+        .score-value {
+            font-size: 1.8em;
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        .case-card {
+            background: #f8f9fa;
+            border-left: 5px solid #667eea;
+            padding: 25px;
+            border-radius: 10px;
+            margin-bottom: 25px;
+        }
+
+        .case-title {
+            font-size: 1.3em;
+            color: #333;
+            margin-bottom: 15px;
+            font-weight: bold;
+        }
+
+        .case-description {
+            color: #555;
+            line-height: 1.6;
+            margin-bottom: 20px;
+            font-size: 1.05em;
+        }
+
+        .options {
+            display: grid;
+            gap: 12px;
+        }
+
+        .option-btn {
+            background: white;
+            border: 2px solid #ddd;
+            padding: 15px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 1em;
+            text-align: left;
+            color: #333;
+        }
+
+        .option-btn:hover {
+            border-color: #667eea;
+            background: #f0f4ff;
+            transform: translateX(5px);
+        }
+
+        .option-btn.correct {
+            background: #d4edda;
+            border-color: #28a745;
+            color: #155724;
+        }
+
+        .option-btn.incorrect {
+            background: #f8d7da;
+            border-color: #dc3545;
+            color: #721c24;
+        }
+
+        .option-btn:disabled {
+            cursor: not-allowed;
+        }
+
+        .feedback {
+            margin-top: 20px;
+            padding: 20px;
+            border-radius: 8px;
+            display: none;
+        }
+
+        .feedback.show {
+            display: block;
+        }
+
+        .feedback.correct {
+            background: #d4edda;
+            border-left: 5px solid #28a745;
+            color: #155724;
+        }
+
+        .feedback.incorrect {
+            background: #f8d7da;
+            border-left: 5px solid #dc3545;
+            color: #721c24;
+        }
+
+        .feedback-title {
+            font-weight: bold;
+            margin-bottom: 10px;
+            font-size: 1.1em;
+        }
+
+        .next-btn {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            border-radius: 8px;
+            font-size: 1.1em;
+            cursor: pointer;
+            margin-top: 20px;
+            display: none;
+            transition: background 0.3s ease;
+        }
+
+        .next-btn:hover {
+            background: #5568d3;
+        }
+
+        .next-btn.show {
+            display: inline-block;
+        }
+
+        .final-screen {
+            text-align: center;
+            display: none;
+        }
+
+        .final-screen.show {
+            display: block;
+        }
+
+        .final-score {
+            font-size: 3em;
+            color: #667eea;
+            margin: 30px 0;
+        }
+
+        .restart-btn {
+            background: #28a745;
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            border-radius: 8px;
+            font-size: 1.1em;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: background 0.3s ease;
+        }
+
+        .restart-btn:hover {
+            background: #218838;
+        }
+
+        .progress-bar {
+            height: 8px;
+            background: #e9ecef;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+            transition: width 0.3s ease;
+        }
+
+        .insurance-badge {
+            display: inline-block;
+            padding: 5px 12px;
+            border-radius: 5px;
+            font-size: 0.85em;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+
+        .badge-krankenkasse {
+            background: #cfe2ff;
+            color: #084298;
+        }
+
+        .badge-unfallversicherung {
+            background: #fff3cd;
+            color: #664d03;
+        }
+
+        .badge-alv {
+            background: #d1e7dd;
+            color: #0f5132;
+        }
+
+        .badge-iv {
+            background: #e7d1f9;
+            color: #5a0f8f;
+        }
+
+        .badge-pensionskasse {
+            background: #f8d7da;
+            color: #842029;
+        }
+
+        .badge-ahv {
+            background: #cff4fc;
+            color: #055160;
+        }
+    </style>
+</head>
+<body>
+    <div class="game-container">
+        <h1>🇨🇭 Schweizer Versicherungen</h1>
+        <p class="subtitle">Lerne spielerisch, welche Versicherung wofür zuständig ist</p>
+
+        <div class="progress-bar">
+            <div class="progress-fill" id="progressFill"></div>
+        </div>
+
+        <div class="score-board">
+            <div class="score-item">
+                <div class="score-label">✅ Richtig</div>
+                <div class="score-value" id="correctScore">0</div>
+            </div>
+            <div class="score-item">
+                <div class="score-label">❌ Falsch</div>
+                <div class="score-value" id="incorrectScore">0</div>
+            </div>
+            <div class="score-item">
+                <div class="score-label">📋 Fall</div>
+                <div class="score-value"><span id="currentCase">1</span>/<span id="totalCases">12</span></div>
+            </div>
+        </div>
+
+        <div id="gameArea"></div>
+
+        <div class="final-screen" id="finalScreen">
+            <h2>🎉 Spiel abgeschlossen!</h2>
+            <div class="final-score" id="finalScore"></div>
+            <p id="finalMessage"></p>
+            <button class="restart-btn" onclick="restartGame()">🔄 Nochmal spielen</button>
+        </div>
+    </div>
+
+    <script>
+        const cases = [
+            {
+                title: "🚗 Autounfall auf dem Arbeitsweg",
+                description: "Luca (19) hat einen Autounfall auf dem Weg zu seiner Lehrstelle als Informatiker. Er erleidet ein Schleudertrauma und kann zwei Wochen nicht arbeiten.",
+                options: [
+                    "Krankenkasse (KVG)",
+                    "Unfallversicherung (UVG)",
+                    "Arbeitslosenversicherung (ALV)",
+                    "Haftpflichtversicherung"
+                ],
+                correct: 1,
+                explanation: "Der Arbeitsweg gilt als Arbeitszeit und fällt unter die obligatorische Unfallversicherung (UVG). Diese deckt Berufsunfälle und Unfälle auf dem Arbeitsweg. 🚑",
+                insurance: "unfallversicherung"
+            },
+            {
+                title: "🤒 Grippe am Wochenende",
+                description: "Amira (22) arbeitet als Produktionstechnikerin in der Industrie und erkrankt am Samstag an einer starken Grippe. Sie muss zum Arzt und braucht Medikamente.",
+                options: [
+                    "Unfallversicherung (UVG)",
+                    "Krankenkasse (KVG)",
+                    "Invalidenversicherung (IV)",
+                    "Pensionskasse (BVG)"
+                ],
+                correct: 1,
+                explanation: "Krankheiten fallen grundsätzlich unter die Krankenkasse (KVG), unabhängig davon, wann sie auftreten. Die UVG deckt nur Unfälle, nicht Krankheiten. 💊",
+                insurance: "krankenkasse"
+            },
+            {
+                title: "💼 Arbeitslosigkeit nach Kündigung",
+                description: "Dimitri (24) wird nach 2 Jahren als Bauingenieur gekündigt, weil das Architekturbüro Aufträge verliert. Er sucht eine neue Stelle, aber das braucht Zeit.",
+                options: [
+                    "Invalidenversicherung (IV)",
+                    "Krankenkasse (KVG)",
+                    "Arbeitslosenversicherung (ALV)",
+                    "Pensionskasse (BVG)"
+                ],
+                correct: 2,
+                explanation: "Die Arbeitslosenversicherung (ALV) zahlt bei unverschuldeter Arbeitslosigkeit. Sie sichert das Einkommen während der Stellensuche ab. 🔍",
+                insurance: "alv"
+            },
+            {
+                title: "⛷️ Sportunfall am Sonntag",
+                description: "Leila (20) arbeitet 60% als Software-Entwicklerin und bricht sich beim Snowboarden am Sonntag das Bein. Sie muss operiert werden.",
+                options: [
+                    "Unfallversicherung (UVG) - Nichtberufsunfall",
+                    "Krankenkasse (KVG)",
+                    "Invalidenversicherung (IV)",
+                    "Private Unfallversicherung"
+                ],
+                correct: 0,
+                explanation: "Bei einem Anstellungsgrad von mindestens 8 Stunden pro Woche ist man automatisch auch gegen Nichtberufsunfälle versichert. Der Snowboard-Unfall am Wochenende fällt darunter. 🏂",
+                insurance: "unfallversicherung"
+            },
+            {
+                title: "🧠 Schwere Verletzung mit Langzeitfolgen",
+                description: "Noah (23) hatte einen schweren Motorradunfall und kann nach der Rehabilitation seinen Beruf als Zimmermann nicht mehr ausüben. Die Ärzte sagen, dass er dauerhaft nicht mehr körperlich arbeiten kann.",
+                options: [
+                    "Unfallversicherung (UVG)",
+                    "Krankenkasse (KVG)",
+                    "Invalidenversicherung (IV)",
+                    "Arbeitslosenversicherung (ALV)"
+                ],
+                correct: 2,
+                explanation: "Die Invalidenversicherung (IV) ist zuständig bei dauerhafter Erwerbsunfähigkeit aufgrund von Krankheit oder Unfall. Sie unterstützt mit Umschulungen, Eingliederungsmassnahmen und Renten. 🦽",
+                insurance: "iv"
+            },
+            {
+                title: "💰 Erste eigene Wohnung",
+                description: "Alina (21) zieht aus und will wissen: Welche Versicherungen muss sie als junge Erwachsene obligatorisch haben?",
+                options: [
+                    "Nur Krankenkasse (KVG)",
+                    "Krankenkasse (KVG) + Unfallversicherung über Arbeitgeber",
+                    "Krankenkasse (KVG) + Haftpflichtversicherung",
+                    "Alle Versicherungen sind freiwillig"
+                ],
+                correct: 1,
+                explanation: "In der Schweiz sind die Krankenkasse (KVG) und die Unfallversicherung (UVG über den Arbeitgeber) obligatorisch. Die Haftpflicht ist sehr empfohlen, aber nicht Pflicht. 🏠",
+                insurance: "krankenkasse"
+            },
+            {
+                title: "🦷 Zahnschmerzen während Studium",
+                description: "Marco (19) ist Student und jobbt 6 Stunden pro Woche in einem Café. Er hat starke Zahnschmerzen und braucht eine Wurzelbehandlung.",
+                options: [
+                    "Krankenkasse (KVG)",
+                    "Unfallversicherung (UVG)",
+                    "Zahnzusatzversicherung (privat)",
+                    "Invalidenversicherung (IV)"
+                ],
+                correct: 2,
+                explanation: "Zahnbehandlungen sind grundsätzlich NICHT von der obligatorischen Krankenkasse gedeckt (Ausnahme: schwere Systemerkrankungen oder Unfälle). Dafür braucht man eine private Zahnzusatzversicherung. 😬",
+                insurance: "krankenkasse"
+            },
+            {
+                title: "🧪 Chemieunfall in der Lehre",
+                description: "Jasmin (17) macht eine Lehre als Chemie- und Pharmatechnologin. Während der Arbeit erleidet sie durch ätzende Dämpfe eine Lungenschädigung.",
+                options: [
+                    "Krankenkasse (KVG)",
+                    "Unfallversicherung (UVG) - Berufsunfall",
+                    "Invalidenversicherung (IV)",
+                    "Betriebshaftpflicht"
+                ],
+                correct: 1,
+                explanation: "Unfälle während der Arbeitszeit sind Berufsunfälle und fallen unter die UVG. Die Unfallversicherung deckt Behandlung, Taggelder und eventuelle Invalidität. ⚗️",
+                insurance: "unfallversicherung"
+            },
+            {
+                title: "🎨 Selbständige Grafikerin stürzt",
+                description: "Elena (25) ist selbständige Grafikerin und arbeitet von zu Hause. Sie rutscht auf der Treppe aus und bricht sich den Arm. Sie ist nicht UVG-versichert.",
+                options: [
+                    "Krankenkasse (KVG) mit Unfalldeckung",
+                    "Invalidenversicherung (IV)",
+                    "Betriebshaftpflicht",
+                    "Keine Versicherung zahlt"
+                ],
+                correct: 0,
+                explanation: "Selbständige sind nicht obligatorisch UVG-versichert. Deshalb müssen sie bei der Krankenkasse eine Unfallzusatzversicherung abschliessen, die dann auch Unfälle deckt. 🩹",
+                insurance: "krankenkasse"
+            },
+            {
+                title: "😔 Burnout und Arbeitsunfähigkeit",
+                description: "Yara (24) arbeitet als Junior Projektleiterin in einem IT-Unternehmen und leidet an einem Burnout. Sie ist seit 4 Monaten krankgeschrieben und in Therapie.",
+                options: [
+                    "Krankenkasse (KVG) für Behandlung",
+                    "Unfallversicherung (UVG)",
+                    "Arbeitslosenversicherung (ALV)",
+                    "Sozialhilfe"
+                ],
+                correct: 0,
+                explanation: "Psychische Erkrankungen wie Burnout oder Depressionen sind Krankheiten und werden von der Krankenkasse (KVG) übernommen. Bei längerer Arbeitsunfähigkeit kann später die IV relevant werden. 💚",
+                insurance: "krankenkasse"
+            },
+            {
+                title: "🏗️ Berufskrankheit in der Lehre",
+                description: "David (20) macht eine Lehre als Automechaniker. Nach 3 Jahren entwickelt er eine Hautkrankheit durch den ständigen Kontakt mit Ölen und Chemikalien.",
+                options: [
+                    "Krankenkasse (KVG)",
+                    "Unfallversicherung (UVG) - Berufskrankheit",
+                    "Invalidenversicherung (IV)",
+                    "Pensionskasse (BVG)"
+                ],
+                correct: 1,
+                explanation: "Berufskrankheiten, die durch die Arbeit verursacht wurden, fallen unter die Unfallversicherung (UVG), auch wenn es keine Unfälle im klassischen Sinn sind. 🛠️",
+                insurance: "unfallversicherung"
+            },
+            {
+                title: "👓 Brille nach Sehtest",
+                description: "Liam (18) ist Lernender und merkt, dass er in der Berufsschule die Wandtafel nicht mehr scharf sieht. Der Optiker verschreibt ihm eine Brille.",
+                options: [
+                    "Krankenkasse (KVG) zahlt alles",
+                    "Krankenkasse zahlt bis 18 Jahre (limitiert)",
+                    "Private Zusatzversicherung",
+                    "Unfallversicherung (UVG)"
+                ],
+                correct: 1,
+                explanation: "Die obligatorische Krankenkasse zahlt Brillen nur für Kinder bis 18 Jahre (limitierter Betrag von CHF 180 pro Jahr). Mit 18 Jahren muss man selbst zahlen oder eine Zusatzversicherung haben. 🤓",
+                insurance: "krankenkasse"
+            }
+        ];
+
+        let currentCaseIndex = 0;
+        let correctAnswers = 0;
+        let incorrectAnswers = 0;
+
+        function initGame() {
+            document.getElementById('totalCases').textContent = cases.length;
+            loadCase();
+        }
+
+        function loadCase() {
+            if (currentCaseIndex >= cases.length) {
+                showFinalScreen();
+                return;
+            }
+
+            const caseData = cases[currentCaseIndex];
+            const gameArea = document.getElementById('gameArea');
+            
+            const progress = ((currentCaseIndex) / cases.length) * 100;
+            document.getElementById('progressFill').style.width = progress + '%';
+            
+            document.getElementById('currentCase').textContent = currentCaseIndex + 1;
+
+            let optionsHTML = '';
+            caseData.options.forEach((option, index) => {
+                optionsHTML += `<button class="option-btn" onclick="selectAnswer(${index})">${option}</button>`;
+            });
+
+            gameArea.innerHTML = `
+                <div class="case-card">
+                    <div class="case-title">Fall ${currentCaseIndex + 1}: ${caseData.title}</div>
+                    <div class="case-description">${caseData.description}</div>
+                    <div class="options">
+                        ${optionsHTML}
+                    </div>
+                    <div class="feedback" id="feedback"></div>
+                    <button class="next-btn" id="nextBtn" onclick="nextCase()">Nächster Fall ➡️</button>
+                </div>
+            `;
+        }
+
+        function selectAnswer(selectedIndex) {
+            const caseData = cases[currentCaseIndex];
+            const buttons = document.querySelectorAll('.option-btn');
+            const feedback = document.getElementById('feedback');
+            const nextBtn = document.getElementById('nextBtn');
+
+            buttons.forEach((btn, index) => {
+                btn.disabled = true;
+                if (index === caseData.correct) {
+                    btn.classList.add('correct');
+                } else if (index === selectedIndex) {
+                    btn.classList.add('incorrect');
+                }
+            });
+
+            const isCorrect = selectedIndex === caseData.correct;
+            
+            if (isCorrect) {
+                correctAnswers++;
+                document.getElementById('correctScore').textContent = correctAnswers;
+                feedback.className = 'feedback correct show';
+                feedback.innerHTML = `
+                    <div class="feedback-title">✅ Richtig!</div>
+                    <p>${caseData.explanation}</p>
+                    <span class="insurance-badge badge-${caseData.insurance}">Zuständig: ${caseData.options[caseData.correct]}</span>
+                `;
+            } else {
+                incorrectAnswers++;
+                document.getElementById('incorrectScore').textContent = incorrectAnswers;
+                feedback.className = 'feedback incorrect show';
+                feedback.innerHTML = `
+                    <div class="feedback-title">❌ Leider falsch</div>
+                    <p>${caseData.explanation}</p>
+                    <span class="insurance-badge badge-${caseData.insurance}">Zuständig: ${caseData.options[caseData.correct]}</span>
+                `;
+            }
+
+            nextBtn.classList.add('show');
+        }
+
+        function nextCase() {
+            currentCaseIndex++;
+            loadCase();
+        }
+
+        function showFinalScreen() {
+            const gameArea = document.getElementById('gameArea');
+            const finalScreen = document.getElementById('finalScreen');
+            const percentage = Math.round((correctAnswers / cases.length) * 100);
+            
+            gameArea.style.display = 'none';
+            finalScreen.classList.add('show');
+            
+            document.getElementById('finalScore').textContent = `${correctAnswers} / ${cases.length} richtig (${percentage}%)`;
+            
+            let message = '';
+            if (percentage === 100) {
+                message = '🌟 Perfekt! Du bist ein Versicherungsexperte!';
+            } else if (percentage >= 80) {
+                message = '👏 Sehr gut! Du kennst dich bestens aus.';
+            } else if (percentage >= 60) {
+                message = '👍 Gut gemacht! Mit etwas Übung wirst du noch besser.';
+            } else {
+                message = '📚 Nicht schlecht! Übe noch ein bisschen, um sicherer zu werden.';
+            }
+            
+            document.getElementById('finalMessage').textContent = message;
+        }
+
+        function restartGame() {
+            currentCaseIndex = 0;
+            correctAnswers = 0;
+            incorrectAnswers = 0;
+            
+            document.getElementById('correctScore').textContent = '0';
+            document.getElementById('incorrectScore').textContent = '0';
+            document.getElementById('gameArea').style.display = 'block';
+            document.getElementById('finalScreen').classList.remove('show');
+            
+            initGame();
+        }
+
+        initGame();
+    </script>
+</body>
+</html>
