@@ -219,6 +219,10 @@
             transition: all 0.3s ease;
             box-shadow: 0 5px 15px rgba(0,0,0,0.2);
             user-select: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
         }
         
         .food-item:hover {
@@ -560,21 +564,21 @@
         
         // Lebensmittel für Drag & Drop
         const foodData = [
-            { name: 'Hahnenwasser', level: 1 },
-            { name: 'Mineralwasser', level: 1 },
-            { name: 'Äpfel', level: 2 },
-            { name: 'Karotten', level: 2 },
-            { name: 'Broccoli', level: 2 },
-            { name: 'Vollkornbrot', level: 3 },
-            { name: 'Teigwaren', level: 3 },
-            { name: 'Kartoffeln', level: 3 },
-            { name: 'Joghurt', level: 4 },
-            { name: 'Käse', level: 4 },
-            { name: 'Eier', level: 5 },
-            { name: 'Poulet', level: 5 },
-            { name: 'Linsen', level: 5 },
-            { name: 'Baumnüsse', level: 6 },
-            { name: 'Schokolade', level: 7 }
+            { name: 'Hahnenwasser', emoji: '💧', level: 1 },
+            { name: 'Mineralwasser', emoji: '🥤', level: 1 },
+            { name: 'Äpfel', emoji: '🍎', level: 2 },
+            { name: 'Karotten', emoji: '🥕', level: 2 },
+            { name: 'Broccoli', emoji: '🥦', level: 2 },
+            { name: 'Vollkornbrot', emoji: '🍞', level: 3 },
+            { name: 'Teigwaren', emoji: '🍝', level: 3 },
+            { name: 'Kartoffeln', emoji: '🥔', level: 3 },
+            { name: 'Joghurt', emoji: '🥛', level: 4 },
+            { name: 'Käse', emoji: '🧀', level: 4 },
+            { name: 'Eier', emoji: '🥚', level: 5 },
+            { name: 'Poulet', emoji: '🍗', level: 5 },
+            { name: 'Linsen', emoji: '🫘', level: 5 },
+            { name: 'Baumnüsse', emoji: '🌰', level: 6 },
+            { name: 'Schokolade', emoji: '🍫', level: 7 }
         ];
         
         // Quiz-Fragen
@@ -704,10 +708,11 @@
             shuffled.forEach((food, index) => {
                 const item = document.createElement('div');
                 item.className = 'food-item';
-                item.textContent = food.name;
+                item.innerHTML = `<span style="font-size: 1.8em; margin-right: 8px;">${food.emoji}</span><span>${food.name}</span>`;
                 item.draggable = true;
                 item.dataset.level = food.level;
                 item.dataset.index = index;
+                item.dataset.name = food.name;
                 
                 item.addEventListener('dragstart', handleDragStart);
                 item.addEventListener('dragend', handleDragEnd);
@@ -753,6 +758,7 @@
             
             const dropLevel = e.currentTarget.dataset.level || e.currentTarget.closest('.pyramid-level').dataset.level;
             const correctLevel = draggedElement.dataset.level;
+            const itemName = draggedElement.dataset.name;
             
             if (dropLevel === correctLevel) {
                 // Richtig!
@@ -762,7 +768,7 @@
                 draggedElement.draggable = false;
                 e.currentTarget.querySelector('.drop-zone').appendChild(draggedElement);
                 
-                showFeedback(true, draggedElement.textContent);
+                showFeedback(true, itemName);
                 
                 updateDragScore();
                 
@@ -772,7 +778,7 @@
                 }
             } else {
                 // Falsch!
-                showFeedback(false, draggedElement.textContent);
+                showFeedback(false, itemName);
                 dragScore = Math.max(0, dragScore - 5);
                 updateDragScore();
             }
@@ -802,7 +808,7 @@
                 box-shadow: 0 10px 40px rgba(0,0,0,0.3);
                 animation: feedbackPop 0.5s ease;
             `;
-            feedback.textContent = isCorrect ? `✅ Richtig! ${itemName}` : `❌ Versuche es nochmal!`;
+            feedback.innerHTML = isCorrect ? `✅ Richtig! <strong>${itemName}</strong>` : `❌ Versuche es nochmal!`;
             document.body.appendChild(feedback);
             
             setTimeout(() => feedback.remove(), 1000);
