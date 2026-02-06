@@ -1,0 +1,1023 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Schweizer Lebensmittelpyramide Challenge 🇨🇭</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600;700&family=Space+Mono:wght@400;700&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        :root {
+            --bg-main: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --primary: #FF6B6B;
+            --secondary: #4ECDC4;
+            --success: #95E1D3;
+            --warning: #F38181;
+            --text-dark: #2C3E50;
+            --text-light: #FFFFFF;
+            --shadow: 0 10px 40px rgba(0,0,0,0.15);
+            --shadow-hover: 0 15px 50px rgba(0,0,0,0.25);
+        }
+        
+        body {
+            font-family: 'Quicksand', sans-serif;
+            background: var(--bg-main);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            overflow-x: hidden;
+        }
+        
+        .container {
+            max-width: 1200px;
+            width: 100%;
+            background: white;
+            border-radius: 30px;
+            box-shadow: var(--shadow);
+            padding: 40px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .container::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(78, 205, 196, 0.1) 0%, transparent 70%);
+            animation: pulse 8s ease-in-out infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { transform: scale(1) rotate(0deg); }
+            50% { transform: scale(1.1) rotate(5deg); }
+        }
+        
+        h1 {
+            font-family: 'Space Mono', monospace;
+            color: var(--primary);
+            text-align: center;
+            font-size: 2.5em;
+            margin-bottom: 15px;
+            text-shadow: 3px 3px 0 rgba(78, 205, 196, 0.3);
+            position: relative;
+            z-index: 1;
+        }
+        
+        .subtitle {
+            text-align: center;
+            color: var(--text-dark);
+            font-size: 1.1em;
+            margin-bottom: 30px;
+            opacity: 0.8;
+        }
+        
+        .game-modes {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 40px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .mode-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+            box-shadow: var(--shadow);
+        }
+        
+        .mode-card:hover {
+            transform: translateY(-10px) scale(1.05);
+            box-shadow: var(--shadow-hover);
+        }
+        
+        .mode-card.active {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--warning) 100%);
+        }
+        
+        .mode-icon {
+            font-size: 3em;
+            margin-bottom: 15px;
+        }
+        
+        .mode-title {
+            font-size: 1.5em;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+        
+        .game-area {
+            display: none;
+            animation: fadeIn 0.5s ease-in;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .game-area.active {
+            display: block;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .score-bar {
+            background: var(--secondary);
+            color: white;
+            padding: 15px 30px;
+            border-radius: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            font-size: 1.2em;
+            font-weight: 600;
+            box-shadow: var(--shadow);
+        }
+        
+        .pyramid {
+            position: relative;
+            width: 100%;
+            max-width: 500px;
+            margin: 30px auto;
+        }
+        
+        .pyramid-level {
+            background: white;
+            border: 3px solid;
+            border-radius: 15px;
+            padding: 15px;
+            margin: 10px auto;
+            text-align: center;
+            min-height: 80px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .pyramid-level:hover {
+            transform: scale(1.05);
+            box-shadow: var(--shadow);
+        }
+        
+        .pyramid-level.level-1 { width: 90%; border-color: #00BCD4; background: rgba(0, 188, 212, 0.1); }
+        .pyramid-level.level-2 { width: 85%; border-color: #4CAF50; background: rgba(76, 175, 80, 0.1); }
+        .pyramid-level.level-3 { width: 75%; border-color: #FFC107; background: rgba(255, 193, 7, 0.1); }
+        .pyramid-level.level-4 { width: 65%; border-color: #FF9800; background: rgba(255, 152, 0, 0.1); }
+        .pyramid-level.level-5 { width: 55%; border-color: #FF5722; background: rgba(255, 87, 34, 0.1); }
+        .pyramid-level.level-6 { width: 45%; border-color: #F44336; background: rgba(244, 67, 54, 0.1); }
+        .pyramid-level.level-7 { width: 35%; border-color: #9C27B0; background: rgba(156, 39, 176, 0.1); }
+        
+        .level-title {
+            font-weight: 700;
+            font-size: 1.1em;
+            margin-bottom: 8px;
+            color: var(--text-dark);
+        }
+        
+        .level-subtitle {
+            font-size: 0.9em;
+            color: #666;
+            margin-bottom: 10px;
+        }
+        
+        .food-items {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+            margin-top: 30px;
+        }
+        
+        .food-item {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--warning) 100%);
+            color: white;
+            padding: 12px 20px;
+            border-radius: 25px;
+            cursor: grab;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            user-select: none;
+        }
+        
+        .food-item:hover {
+            transform: translateY(-5px) rotate(2deg);
+            box-shadow: var(--shadow-hover);
+        }
+        
+        .food-item.dragging {
+            opacity: 0.5;
+            cursor: grabbing;
+        }
+        
+        .food-item.placed {
+            background: var(--success);
+            cursor: default;
+        }
+        
+        .drop-zone {
+            min-height: 50px;
+            border: 2px dashed transparent;
+            border-radius: 10px;
+            padding: 10px;
+            transition: all 0.3s ease;
+        }
+        
+        .drop-zone.drag-over {
+            border-color: var(--secondary);
+            background: rgba(78, 205, 196, 0.1);
+        }
+        
+        .quiz-container {
+            max-width: 700px;
+            margin: 0 auto;
+        }
+        
+        .question-card {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 20px;
+            box-shadow: var(--shadow);
+            border-left: 5px solid var(--primary);
+        }
+        
+        .question-text {
+            font-size: 1.3em;
+            font-weight: 600;
+            color: var(--text-dark);
+            margin-bottom: 25px;
+        }
+        
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        
+        .option {
+            background: linear-gradient(135deg, #f5f5f5 0%, #e8e8e8 100%);
+            padding: 20px;
+            border-radius: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 3px solid transparent;
+            font-weight: 600;
+        }
+        
+        .option:hover {
+            transform: translateX(10px);
+            background: linear-gradient(135deg, var(--secondary) 0%, #3db8af 100%);
+            color: white;
+        }
+        
+        .option.selected {
+            border-color: var(--primary);
+            background: rgba(255, 107, 107, 0.1);
+        }
+        
+        .option.correct {
+            background: var(--success);
+            border-color: #76c893;
+            color: white;
+            animation: correctPulse 0.5s ease;
+        }
+        
+        .option.wrong {
+            background: var(--warning);
+            border-color: #e63946;
+            color: white;
+            animation: shake 0.5s ease;
+        }
+        
+        @keyframes correctPulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+        
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-10px); }
+            75% { transform: translateX(10px); }
+        }
+        
+        .btn {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--warning) 100%);
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            border-radius: 25px;
+            font-size: 1.1em;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: var(--shadow);
+            font-family: 'Quicksand', sans-serif;
+            margin: 10px;
+        }
+        
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-hover);
+        }
+        
+        .btn-secondary {
+            background: linear-gradient(135deg, var(--secondary) 0%, #3db8af 100%);
+        }
+        
+        .button-group {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 30px;
+        }
+        
+        .result-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            animation: fadeIn 0.3s ease;
+        }
+        
+        .result-modal.active {
+            display: flex;
+        }
+        
+        .result-content {
+            background: white;
+            padding: 50px;
+            border-radius: 30px;
+            text-align: center;
+            max-width: 500px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            animation: slideUp 0.5s ease;
+        }
+        
+        @keyframes slideUp {
+            from { transform: translateY(50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        
+        .result-icon {
+            font-size: 5em;
+            margin-bottom: 20px;
+        }
+        
+        .result-title {
+            font-size: 2.5em;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 15px;
+        }
+        
+        .result-score {
+            font-size: 1.5em;
+            color: var(--text-dark);
+            margin-bottom: 30px;
+        }
+        
+        .info-box {
+            background: linear-gradient(135deg, rgba(78, 205, 196, 0.1) 0%, rgba(102, 126, 234, 0.1) 100%);
+            border-left: 5px solid var(--secondary);
+            padding: 20px;
+            border-radius: 15px;
+            margin: 20px 0;
+            font-size: 0.95em;
+            line-height: 1.6;
+        }
+        
+        .info-box strong {
+            color: var(--primary);
+        }
+        
+        @media (max-width: 768px) {
+            h1 { font-size: 2em; }
+            .container { padding: 20px; }
+            .mode-card { padding: 20px; }
+            .pyramid-level { font-size: 0.9em; }
+            .food-item { font-size: 0.9em; padding: 10px 15px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🍎 Schweizer Lebensmittelpyramide 🇨🇭</h1>
+        <p class="subtitle">Lerne spielerisch die richtige Ernährung für Jugendliche!</p>
+        
+        <div class="game-modes" id="gameModes">
+            <div class="mode-card" onclick="startMode('drag')">
+                <div class="mode-icon">🎯</div>
+                <div class="mode-title">Zuordnungs-Challenge</div>
+                <p>Ordne Lebensmittel der Pyramide zu</p>
+            </div>
+            <div class="mode-card" onclick="startMode('quiz')">
+                <div class="mode-icon">🧠</div>
+                <div class="mode-title">Wissens-Quiz</div>
+                <p>Teste dein Ernährungswissen</p>
+            </div>
+            <div class="mode-card" onclick="startMode('portions')">
+                <div class="mode-icon">📊</div>
+                <div class="mode-title">Portionen-Profi</div>
+                <p>Wie viel sollst du essen?</p>
+            </div>
+        </div>
+        
+        <!-- Drag & Drop Mode -->
+        <div class="game-area" id="dragMode">
+            <div class="score-bar">
+                <span>🏆 Punkte: <span id="dragScore">0</span></span>
+                <span>✅ Richtig: <span id="dragCorrect">0</span>/15</span>
+            </div>
+            
+            <div class="info-box">
+                <strong>Aufgabe:</strong> Ziehe die Lebensmittel auf die richtige Stufe der Pyramide! 
+                Je weiter unten, desto mehr solltest du davon essen.
+            </div>
+            
+            <div class="pyramid" id="pyramid">
+                <div class="pyramid-level level-1 drop-zone" data-level="1">
+                    <div class="level-title">🚰 Getränke</div>
+                    <div class="level-subtitle">1-2 Liter am Tag</div>
+                    <div class="drop-zone" data-level="1"></div>
+                </div>
+                <div class="pyramid-level level-2 drop-zone" data-level="2">
+                    <div class="level-title">🥦 Gemüse & Früchte</div>
+                    <div class="level-subtitle">5 Portionen am Tag</div>
+                    <div class="drop-zone" data-level="2"></div>
+                </div>
+                <div class="pyramid-level level-3 drop-zone" data-level="3">
+                    <div class="level-title">🍞 Getreide & Kartoffeln</div>
+                    <div class="level-subtitle">3 Portionen am Tag</div>
+                    <div class="drop-zone" data-level="3"></div>
+                </div>
+                <div class="pyramid-level level-4 drop-zone" data-level="4">
+                    <div class="level-title">🥛 Milchprodukte</div>
+                    <div class="level-subtitle">2-3 Portionen am Tag</div>
+                    <div class="drop-zone" data-level="4"></div>
+                </div>
+                <div class="pyramid-level level-5 drop-zone" data-level="5">
+                    <div class="level-title">🥚 Protein (Eier, Fleisch, Hülsenfrüchte)</div>
+                    <div class="level-subtitle">1 Portion am Tag</div>
+                    <div class="drop-zone" data-level="5"></div>
+                </div>
+                <div class="pyramid-level level-6 drop-zone" data-level="6">
+                    <div class="level-title">🌰 Nüsse & Samen</div>
+                    <div class="level-subtitle">1 Handvoll am Tag</div>
+                    <div class="drop-zone" data-level="6"></div>
+                </div>
+                <div class="pyramid-level level-7 drop-zone" data-level="7">
+                    <div class="level-title">🍰 Süsses & Snacks (optional)</div>
+                    <div class="level-subtitle">0-1 Portion am Tag</div>
+                    <div class="drop-zone" data-level="7"></div>
+                </div>
+            </div>
+            
+            <div class="food-items" id="foodItems"></div>
+            
+            <div class="button-group">
+                <button class="btn btn-secondary" onclick="showModes()">🏠 Zurück</button>
+                <button class="btn" onclick="resetDragGame()">🔄 Neu starten</button>
+            </div>
+        </div>
+        
+        <!-- Quiz Mode -->
+        <div class="game-area" id="quizMode">
+            <div class="score-bar">
+                <span>🏆 Punkte: <span id="quizScore">0</span></span>
+                <span>Frage <span id="currentQuestion">1</span>/<span id="totalQuestions">10</span></span>
+            </div>
+            
+            <div class="quiz-container" id="quizContainer"></div>
+            
+            <div class="button-group">
+                <button class="btn btn-secondary" onclick="showModes()">🏠 Zurück</button>
+                <button class="btn" onclick="nextQuestion()" id="nextBtn" style="display: none;">Weiter ➡️</button>
+            </div>
+        </div>
+        
+        <!-- Portions Mode -->
+        <div class="game-area" id="portionsMode">
+            <div class="score-bar">
+                <span>🏆 Punkte: <span id="portionsScore">0</span></span>
+                <span>Frage <span id="currentPortionQ">1</span>/<span id="totalPortionQ">8</span></span>
+            </div>
+            
+            <div class="quiz-container" id="portionsContainer"></div>
+            
+            <div class="button-group">
+                <button class="btn btn-secondary" onclick="showModes()">🏠 Zurück</button>
+                <button class="btn" onclick="nextPortionQuestion()" id="nextPortionBtn" style="display: none;">Weiter ➡️</button>
+            </div>
+        </div>
+        
+        <!-- Result Modal -->
+        <div class="result-modal" id="resultModal">
+            <div class="result-content">
+                <div class="result-icon" id="resultIcon"></div>
+                <div class="result-title" id="resultTitle"></div>
+                <div class="result-score" id="resultText"></div>
+                <button class="btn" onclick="closeResult()">Toll! 🎉</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Spielvariablen
+        let dragScore = 0;
+        let dragCorrect = 0;
+        let quizScore = 0;
+        let currentQuestionIndex = 0;
+        let currentPortionIndex = 0;
+        let portionsScore = 0;
+        
+        // Lebensmittel für Drag & Drop
+        const foodData = [
+            { name: 'Hahnenwasser', level: 1 },
+            { name: 'Mineralwasser', level: 1 },
+            { name: 'Äpfel', level: 2 },
+            { name: 'Karotten', level: 2 },
+            { name: 'Broccoli', level: 2 },
+            { name: 'Vollkornbrot', level: 3 },
+            { name: 'Teigwaren', level: 3 },
+            { name: 'Kartoffeln', level: 3 },
+            { name: 'Joghurt', level: 4 },
+            { name: 'Käse', level: 4 },
+            { name: 'Eier', level: 5 },
+            { name: 'Poulet', level: 5 },
+            { name: 'Linsen', level: 5 },
+            { name: 'Baumnüsse', level: 6 },
+            { name: 'Schokolade', level: 7 }
+        ];
+        
+        // Quiz-Fragen
+        const quizQuestions = [
+            {
+                question: 'Wie viele Portionen Gemüse und Früchte solltest du täglich essen?',
+                options: ['3 Portionen', '5 Portionen', '7 Portionen', '2 Portionen'],
+                correct: 1,
+                explanation: '5 Portionen pro Tag sind ideal: 3x Gemüse und 2x Früchte!'
+            },
+            {
+                question: 'Welches Öl wird für die Schweizer Küche besonders empfohlen?',
+                options: ['Olivenöl', 'Rapsöl', 'Sonnenblumenöl', 'Kokosfett'],
+                correct: 1,
+                explanation: 'Rapsöl ist ideal! Es hat gute Omega-3-Fettsäuren und ist vielseitig einsetzbar.'
+            },
+            {
+                question: 'Wie viel Wasser solltest du täglich trinken?',
+                options: ['0,5-1 Liter', '1-2 Liter', '3-4 Liter', '5-6 Liter'],
+                correct: 1,
+                explanation: '1-2 Liter ungezuckerter Getränke pro Tag sind perfekt!'
+            },
+            {
+                question: 'Welches Produkt solltest du bevorzugen?',
+                options: ['Weissbrot', 'Vollkornbrot', 'Süsses Gebäck', 'Toast'],
+                correct: 1,
+                explanation: 'Vollkornbrot enthält mehr Nahrungsfasern und sättigt besser!'
+            },
+            {
+                question: 'Wie oft pro Woche sollten Hülsenfrüchte (Linsen, Kichererbsen) gegessen werden?',
+                options: ['Nie', 'Mindestens 1x', '5x', 'Täglich'],
+                correct: 1,
+                explanation: 'Mindestens 1x pro Woche! Hülsenfrüchte sind super Proteinquellen.'
+            },
+            {
+                question: 'Was gehört NICHT zur empfohlenen täglichen Ernährung?',
+                options: ['Gemüse', 'Vollkornprodukte', 'Süssgetränke', 'Milchprodukte'],
+                correct: 2,
+                explanation: 'Süssgetränke sind optional und sollten nur in kleinen Mengen konsumiert werden.'
+            },
+            {
+                question: 'Wie viele Portionen Milchprodukte sind täglich empfohlen?',
+                options: ['1 Portion', '2-3 Portionen', '5 Portionen', 'Keine'],
+                correct: 1,
+                explanation: '2-3 Portionen Milchprodukte liefern wichtiges Calcium und Protein!'
+            },
+            {
+                question: 'Welche Aussage über Fleischkonsum ist richtig?',
+                options: ['Täglich Fleisch essen', 'Maximal 2-3x pro Woche', 'Nie Fleisch essen', '5x pro Woche'],
+                correct: 1,
+                explanation: 'Maximal 2-3 Mal pro Woche Fleisch (inkl. Geflügel und Verarbeitetes).'
+            },
+            {
+                question: 'Was ist eine Portion Nüsse?',
+                options: ['Eine grosse Handvoll', 'Eine kleine Handvoll', 'Eine ganze Packung', 'Ein paar Nüsse'],
+                correct: 1,
+                explanation: 'Eine kleine Handvoll (15-30g) ungesalzene Nüsse täglich ist ideal!'
+            },
+            {
+                question: 'Welches Getränk ist am besten zum Durstlöschen?',
+                options: ['Cola', 'Energy Drink', 'Hahnenwasser', 'Sirup'],
+                correct: 2,
+                explanation: 'Hahnenwasser ist der beste Durstlöscher - gesund und umweltfreundlich!'
+            }
+        ];
+        
+        // Portionen-Fragen
+        const portionQuestions = [
+            {
+                question: 'Wie gross ist 1 Portion Gemüse oder Früchte?',
+                options: ['60 Gramm', '120 Gramm (eine Handvoll)', '200 Gramm', '500 Gramm'],
+                correct: 1,
+                explanation: '1 Portion = 120 Gramm = eine Handvoll!'
+            },
+            {
+                question: 'Wie viel Brot entspricht 1 Portion Getreideprodukte?',
+                options: ['50 Gramm', '75-125 Gramm', '200 Gramm', '30 Gramm'],
+                correct: 1,
+                explanation: '75-125 Gramm Brot sind eine Portion - etwa 2-3 Scheiben.'
+            },
+            {
+                question: 'Wie viel Milch ist 1 Portion?',
+                options: ['1 Deziliter', '2 Deziliter', '5 Deziliter', '1 Liter'],
+                correct: 1,
+                explanation: '2 Deziliter (200ml) Milch entsprechen einer Portion.'
+            },
+            {
+                question: 'Wie viele Eier sind 1 Portion Protein?',
+                options: ['1 Ei', '2-3 Eier', '5 Eier', '10 Eier'],
+                correct: 1,
+                explanation: '2-3 Eier sind eine Portion Protein.'
+            },
+            {
+                question: 'Wie viel Rapsöl solltest du täglich verwenden?',
+                options: ['1 Teelöffel', '2 Esslöffel', '5 Esslöffel', '1 Deziliter'],
+                correct: 1,
+                explanation: '2 Esslöffel (20g) Pflanzenöl täglich, davon mindestens 1 EL Rapsöl.'
+            },
+            {
+                question: 'Wie viel Fleisch/Fisch ist 1 Portion?',
+                options: ['50 Gramm', '100-120 Gramm', '200 Gramm', '300 Gramm'],
+                correct: 1,
+                explanation: '100-120 Gramm Fleisch oder Fisch sind eine Portion.'
+            },
+            {
+                question: 'Wie viel Hartkäse entspricht 1 Portion Milchprodukte?',
+                options: ['10 Gramm', '30 Gramm', '60 Gramm', '100 Gramm'],
+                correct: 1,
+                explanation: '30 Gramm Halbhart- oder Hartkäse sind eine Portion.'
+            },
+            {
+                question: 'Wie viele Portionen Vollkorn-Getreideprodukte sind mindestens empfohlen?',
+                options: ['1 Portion', 'Mindestens 1,5 (die Hälfte von 3)', '3 Portionen', 'Keine'],
+                correct: 1,
+                explanation: 'Von den 3 täglichen Portionen sollte mindestens die Hälfte Vollkorn sein!'
+            }
+        ];
+        
+        // Spiel initialisieren
+        function initDragGame() {
+            const container = document.getElementById('foodItems');
+            container.innerHTML = '';
+            
+            // Shuffle food items
+            const shuffled = [...foodData].sort(() => Math.random() - 0.5);
+            
+            shuffled.forEach((food, index) => {
+                const item = document.createElement('div');
+                item.className = 'food-item';
+                item.textContent = food.name;
+                item.draggable = true;
+                item.dataset.level = food.level;
+                item.dataset.index = index;
+                
+                item.addEventListener('dragstart', handleDragStart);
+                item.addEventListener('dragend', handleDragEnd);
+                
+                container.appendChild(item);
+            });
+            
+            // Setup drop zones
+            document.querySelectorAll('.drop-zone').forEach(zone => {
+                zone.addEventListener('dragover', handleDragOver);
+                zone.addEventListener('drop', handleDrop);
+                zone.addEventListener('dragleave', handleDragLeave);
+            });
+        }
+        
+        let draggedElement = null;
+        
+        function handleDragStart(e) {
+            draggedElement = e.target;
+            e.target.classList.add('dragging');
+            e.dataTransfer.effectAllowed = 'move';
+        }
+        
+        function handleDragEnd(e) {
+            e.target.classList.remove('dragging');
+        }
+        
+        function handleDragOver(e) {
+            e.preventDefault();
+            e.dataTransfer.dropEffect = 'move';
+            e.currentTarget.classList.add('drag-over');
+        }
+        
+        function handleDragLeave(e) {
+            e.currentTarget.classList.remove('drag-over');
+        }
+        
+        function handleDrop(e) {
+            e.preventDefault();
+            e.currentTarget.classList.remove('drag-over');
+            
+            if (!draggedElement) return;
+            
+            const dropLevel = e.currentTarget.dataset.level || e.currentTarget.closest('.pyramid-level').dataset.level;
+            const correctLevel = draggedElement.dataset.level;
+            
+            if (dropLevel === correctLevel) {
+                // Richtig!
+                dragScore += 10;
+                dragCorrect++;
+                draggedElement.classList.add('placed');
+                draggedElement.draggable = false;
+                e.currentTarget.querySelector('.drop-zone').appendChild(draggedElement);
+                
+                showFeedback(true, draggedElement.textContent);
+                
+                updateDragScore();
+                
+                // Check if game is complete
+                if (dragCorrect === foodData.length) {
+                    setTimeout(() => showResult('drag', dragScore, dragCorrect), 500);
+                }
+            } else {
+                // Falsch!
+                showFeedback(false, draggedElement.textContent);
+                dragScore = Math.max(0, dragScore - 5);
+                updateDragScore();
+            }
+            
+            draggedElement = null;
+        }
+        
+        function updateDragScore() {
+            document.getElementById('dragScore').textContent = dragScore;
+            document.getElementById('dragCorrect').textContent = dragCorrect;
+        }
+        
+        function showFeedback(isCorrect, itemName) {
+            const feedback = document.createElement('div');
+            feedback.style.cssText = `
+                position: fixed;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                background: ${isCorrect ? '#95E1D3' : '#F38181'};
+                color: white;
+                padding: 30px 50px;
+                border-radius: 20px;
+                font-size: 1.5em;
+                font-weight: bold;
+                z-index: 2000;
+                box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+                animation: feedbackPop 0.5s ease;
+            `;
+            feedback.textContent = isCorrect ? `✅ Richtig! ${itemName}` : `❌ Versuche es nochmal!`;
+            document.body.appendChild(feedback);
+            
+            setTimeout(() => feedback.remove(), 1000);
+        }
+        
+        // Quiz initialisieren
+        function initQuiz() {
+            currentQuestionIndex = 0;
+            quizScore = 0;
+            showQuestion();
+        }
+        
+        function showQuestion() {
+            const container = document.getElementById('quizContainer');
+            const question = quizQuestions[currentQuestionIndex];
+            
+            document.getElementById('currentQuestion').textContent = currentQuestionIndex + 1;
+            document.getElementById('totalQuestions').textContent = quizQuestions.length;
+            
+            container.innerHTML = `
+                <div class="question-card">
+                    <div class="question-text">${question.question}</div>
+                    <div class="options">
+                        ${question.options.map((opt, i) => `
+                            <div class="option" onclick="selectAnswer(${i})">${opt}</div>
+                        `).join('')}
+                    </div>
+                </div>
+            `;
+            
+            document.getElementById('nextBtn').style.display = 'none';
+        }
+        
+        function selectAnswer(selectedIndex) {
+            const question = quizQuestions[currentQuestionIndex];
+            const options = document.querySelectorAll('.option');
+            
+            options.forEach((opt, i) => {
+                opt.style.pointerEvents = 'none';
+                if (i === question.correct) {
+                    opt.classList.add('correct');
+                }
+                if (i === selectedIndex && i !== question.correct) {
+                    opt.classList.add('wrong');
+                }
+            });
+            
+            if (selectedIndex === question.correct) {
+                quizScore += 10;
+                document.getElementById('quizScore').textContent = quizScore;
+            }
+            
+            // Show explanation
+            const container = document.getElementById('quizContainer');
+            const explanationDiv = document.createElement('div');
+            explanationDiv.className = 'info-box';
+            explanationDiv.innerHTML = `<strong>💡 Erklärung:</strong> ${question.explanation}`;
+            container.appendChild(explanationDiv);
+            
+            document.getElementById('nextBtn').style.display = 'inline-block';
+        }
+        
+        function nextQuestion() {
+            currentQuestionIndex++;
+            if (currentQuestionIndex < quizQuestions.length) {
+                showQuestion();
+            } else {
+                showResult('quiz', quizScore, quizQuestions.length);
+            }
+        }
+        
+        // Portionen-Quiz
+        function initPortionsQuiz() {
+            currentPortionIndex = 0;
+            portionsScore = 0;
+            showPortionQuestion();
+        }
+        
+        function showPortionQuestion() {
+            const container = document.getElementById('portionsContainer');
+            const question = portionQuestions[currentPortionIndex];
+            
+            document.getElementById('currentPortionQ').textContent = currentPortionIndex + 1;
+            document.getElementById('totalPortionQ').textContent = portionQuestions.length;
+            
+            container.innerHTML = `
+                <div class="question-card">
+                    <div class="question-text">${question.question}</div>
+                    <div class="options">
+                        ${question.options.map((opt, i) => `
+                            <div class="option" onclick="selectPortionAnswer(${i})">${opt}</div>
+                        `).join('')}
+                    </div>
+                </div>
+            `;
+            
+            document.getElementById('nextPortionBtn').style.display = 'none';
+        }
+        
+        function selectPortionAnswer(selectedIndex) {
+            const question = portionQuestions[currentPortionIndex];
+            const options = document.querySelectorAll('.option');
+            
+            options.forEach((opt, i) => {
+                opt.style.pointerEvents = 'none';
+                if (i === question.correct) {
+                    opt.classList.add('correct');
+                }
+                if (i === selectedIndex && i !== question.correct) {
+                    opt.classList.add('wrong');
+                }
+            });
+            
+            if (selectedIndex === question.correct) {
+                portionsScore += 10;
+                document.getElementById('portionsScore').textContent = portionsScore;
+            }
+            
+            const container = document.getElementById('portionsContainer');
+            const explanationDiv = document.createElement('div');
+            explanationDiv.className = 'info-box';
+            explanationDiv.innerHTML = `<strong>💡 Erklärung:</strong> ${question.explanation}`;
+            container.appendChild(explanationDiv);
+            
+            document.getElementById('nextPortionBtn').style.display = 'inline-block';
+        }
+        
+        function nextPortionQuestion() {
+            currentPortionIndex++;
+            if (currentPortionIndex < portionQuestions.length) {
+                showPortionQuestion();
+            } else {
+                showResult('portions', portionsScore, portionQuestions.length);
+            }
+        }
+        
+        // Modi wechseln
+        function startMode(mode) {
+            document.getElementById('gameModes').style.display = 'none';
+            document.querySelectorAll('.game-area').forEach(area => {
+                area.classList.remove('active');
+            });
+            
+            if (mode === 'drag') {
+                document.getElementById('dragMode').classList.add('active');
+                dragScore = 0;
+                dragCorrect = 0;
+                updateDragScore();
+                initDragGame();
+            } else if (mode === 'quiz') {
+                document.getElementById('quizMode').classList.add('active');
+                initQuiz();
+            } else if (mode === 'portions') {
+                document.getElementById('portionsMode').classList.add('active');
+                initPortionsQuiz();
+            }
+        }
+        
+        function showModes() {
+            document.getElementById('gameModes').style.display = 'grid';
+            document.querySelectorAll('.game-area').forEach(area => {
+                area.classList.remove('active');
+            });
+        }
+        
+        function resetDragGame() {
+            dragScore = 0;
+            dragCorrect = 0;
+            updateDragScore();
+            document.querySelectorAll('.drop-zone .food-item').forEach(item => {
+                item.remove();
+            });
+            initDragGame();
+        }
+        
+        function showResult(mode, score, total) {
+            const modal = document.getElementById('resultModal');
+            const icon = document.getElementById('resultIcon');
+            const title = document.getElementById('resultTitle');
+            const text = document.getElementById('resultText');
+            
+            const percentage = (score / (total * 10)) * 100;
+            
+            if (percentage >= 80) {
+                icon.textContent = '🏆';
+                title.textContent = 'Fantastisch!';
+                text.textContent = `Du hast ${score} von ${total * 10} Punkten erreicht! Du bist ein Ernährungs-Profi! 🌟`;
+            } else if (percentage >= 60) {
+                icon.textContent = '👍';
+                title.textContent = 'Gut gemacht!';
+                text.textContent = `Du hast ${score} von ${total * 10} Punkten erreicht! Das war schon sehr gut! 💪`;
+            } else {
+                icon.textContent = '📚';
+                title.textContent = 'Weiter üben!';
+                text.textContent = `Du hast ${score} von ${total * 10} Punkten erreicht. Versuch es nochmal! 😊`;
+            }
+            
+            modal.classList.add('active');
+        }
+        
+        function closeResult() {
+            document.getElementById('resultModal').classList.remove('active');
+            showModes();
+        }
+        
+        // Add CSS animation for feedback
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes feedbackPop {
+                0% { transform: translate(-50%, -50%) scale(0); }
+                50% { transform: translate(-50%, -50%) scale(1.1); }
+                100% { transform: translate(-50%, -50%) scale(1); }
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+</body>
+</html>
