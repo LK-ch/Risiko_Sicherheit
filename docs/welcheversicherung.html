@@ -28,6 +28,26 @@
             max-width: 800px;
             width: 100%;
             padding: 40px;
+            position: relative;
+        }
+
+        .back-button {
+            position: absolute;
+            left: 40px;
+            top: 40px;
+            background: rgba(102, 126, 234, 0.1);
+            color: #667eea;
+            padding: 10px 20px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            display: inline-block;
+        }
+
+        .back-button:hover {
+            background: rgba(102, 126, 234, 0.2);
+            transform: translateX(-3px);
         }
 
         h1 {
@@ -35,6 +55,7 @@
             text-align: center;
             margin-bottom: 10px;
             font-size: 2em;
+            margin-top: 40px;
         }
 
         .subtitle {
@@ -263,10 +284,28 @@
             background: #cff4fc;
             color: #055160;
         }
+
+        @media (max-width: 768px) {
+            .game-container {
+                padding: 20px;
+            }
+            .back-button {
+                left: 20px;
+                top: 20px;
+                padding: 8px 15px;
+                font-size: 0.9em;
+            }
+            h1 {
+                font-size: 1.5em;
+                margin-top: 50px;
+            }
+        }
     </style>
 </head>
 <body>
     <div class="game-container">
+        <a href="index.html" class="back-button">← Zurück</a>
+        
         <h1>🇨🇭 Schweizer Versicherungen</h1>
         <p class="subtitle">Lerne spielerisch, welche Versicherung wofür zuständig ist</p>
 
