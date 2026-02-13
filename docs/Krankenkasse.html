@@ -9,10 +9,7 @@
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: url('images/KBild.webp');
-            background-size: cover;
-            background-position: center;
-            background-attachment: fixed;
+            background: #f5f7fa;
             min-height: 100vh;
             padding: 20px;
         }
@@ -25,7 +22,7 @@
             overflow: hidden;
         }
         header {
-            background: linear-gradient(135deg, #f39c12 0%, #e67e22 100%);
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
             padding: 25px 40px;
             position: relative;
@@ -74,10 +71,10 @@
         }
         .avan-message {
             flex: 1;
-            background: #fff3e0;
+            background: #f0f4ff;
             padding: 20px;
             border-radius: 15px;
-            border-left: 4px solid #f39c12;
+            border-left: 4px solid #667eea;
             position: relative;
         }
         .avan-message:before {
@@ -89,10 +86,10 @@
             height: 0;
             border-top: 10px solid transparent;
             border-bottom: 10px solid transparent;
-            border-right: 10px solid #fff3e0;
+            border-right: 10px solid #f0f4ff;
         }
         .avan-message h3 {
-            color: #e67e22;
+            color: #667eea;
             margin-bottom: 10px;
         }
         .avan-message p {
@@ -132,14 +129,14 @@
             text-align: center;
         }
         .franchise-card:hover {
-            border-color: #f39c12;
+            border-color: #667eea;
             transform: translateY(-3px);
-            box-shadow: 0 5px 15px rgba(243, 156, 18, 0.3);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
         }
         .franchise-card.selected {
-            background: linear-gradient(135deg, #f39c12, #e67e22);
+            background: linear-gradient(135deg, #667eea, #764ba2);
             color: white;
-            border-color: #f39c12;
+            border-color: #667eea;
         }
         .franchise-card h3 {
             font-size: 2em;
@@ -153,7 +150,7 @@
             padding: 30px 40px;
         }
         .month-display {
-            background: linear-gradient(135deg, #f39c12 0%, #e67e22 100%);
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
             padding: 20px;
             border-radius: 10px;
@@ -169,11 +166,11 @@
             padding: 25px;
             border-radius: 10px;
             margin: 15px 0;
-            border-left: 5px solid #f39c12;
+            border-left: 5px solid #667eea;
         }
         .event-box.medical {
-            border-left-color: #e67e22;
-            background: #fff3e0;
+            border-left-color: #764ba2;
+            background: #f0f4ff;
         }
         .invoice {
             background: white;
@@ -189,7 +186,7 @@
             margin-bottom: 15px;
         }
         .invoice-header h3 {
-            color: #f39c12;
+            color: #667eea;
             font-size: 1.5em;
         }
         .invoice-table {
@@ -280,12 +277,12 @@
             margin: 10px 5px;
         }
         .btn-primary {
-            background: linear-gradient(135deg, #f39c12, #e67e22);
+            background: linear-gradient(135deg, #667eea, #764ba2);
             color: white;
         }
         .btn-primary:hover:not(:disabled) {
             transform: translateY(-2px);
-            box-shadow: 0 10px 25px rgba(243, 156, 18, 0.4);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
         }
         .btn-primary:disabled {
             opacity: 0.5;
@@ -299,22 +296,22 @@
             background: #7f8c8d;
         }
         .btn-overview {
-            background: linear-gradient(135deg, #f39c12 0%, #e67e22 100%);
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
         }
         .btn-overview:hover {
             transform: translateY(-2px);
-            box-shadow: 0 10px 25px rgba(243, 156, 18, 0.4);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
         }
         .yearly-overview {
             background: white;
-            border: 3px solid #f39c12;
+            border: 3px solid #667eea;
             padding: 25px;
             border-radius: 15px;
             margin: 15px 0;
         }
         .yearly-overview h3 {
-            color: #f39c12;
+            color: #667eea;
             margin-bottom: 20px;
             font-size: 1.8em;
         }
@@ -330,7 +327,7 @@
             border-bottom: 1px solid #ddd;
         }
         .overview-table th {
-            background: linear-gradient(135deg, #f39c12 0%, #e67e22 100%);
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
             font-weight: bold;
         }
@@ -338,7 +335,7 @@
             background: #f8f9fa;
         }
         .summary-box {
-            background: linear-gradient(135deg, #f39c12 0%, #e67e22 100%);
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
             padding: 20px;
             border-radius: 10px;
@@ -1198,12 +1195,12 @@
             container.innerHTML = `
                 <div style="font-size: 100px; text-align: center;">🎉</div>
                 <div class="yearly-overview">
-                    <h3 style="text-align: center; color: #f39c12; font-size: 2em;">
+                    <h3 style="text-align: center; color: #667eea; font-size: 2em;">
                         🎊 Gratulation! Du hast das Jahr 2024 abgeschlossen!
                     </h3>
                     
-                    <div style="background: white; border: 3px solid #f39c12; padding: 25px; border-radius: 15px; margin: 20px 0;">
-                        <h3 style="color: #f39c12; margin-bottom: 20px; font-size: 1.5em;">📊 Monatliche Übersicht 2024</h3>
+                    <div style="background: white; border: 3px solid #667eea; padding: 25px; border-radius: 15px; margin: 20px 0;">
+                        <h3 style="color: #667eea; margin-bottom: 20px; font-size: 1.5em;">📊 Monatliche Übersicht 2024</h3>
                         <table class="overview-table">
                             <thead>
                                 <tr>
@@ -1263,13 +1260,13 @@
                         </p>
                     </div>
                     
-                    <div style="background: #fff3e0; padding: 20px; border-radius: 10px; margin-top: 20px;">
-                        <h4 style="color: #f39c12; margin-bottom: 12px;">🔍 Franchise-Vergleich für 2024</h4>
+                    <div style="background: #f0f4ff; padding: 20px; border-radius: 10px; margin-top: 20px;">
+                        <h4 style="color: #667eea; margin-bottom: 12px;">🔍 Franchise-Vergleich für 2024</h4>
                         <p style="margin-bottom: 12px;">Wie hätten sich andere Franchisen auf Avans Gesamtkosten ausgewirkt?</p>
                         
                         <table style="width: 100%; border-collapse: collapse;">
                             <thead>
-                                <tr style="background: #f39c12; color: white;">
+                                <tr style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white;">
                                     <th style="padding: 10px; text-align: left;">Franchise</th>
                                     <th style="padding: 10px; text-align: left;">Prämie/Mt.</th>
                                     <th style="padding: 10px; text-align: left;">Prämien Total</th>
