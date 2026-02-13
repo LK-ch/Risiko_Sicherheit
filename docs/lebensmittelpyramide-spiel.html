@@ -195,7 +195,7 @@
             background: white;
             border: 3px solid;
             border-radius: 12px;
-            padding: 10px 15px;
+            padding: 5px 10px;
             text-align: center;
             display: flex;
             flex-direction: column;
@@ -206,13 +206,13 @@
         }
         
         /* Pyramiden-Breiten für jede Ebene - viel flacher und breiter werdend */
-        .pyramid-level.level-1 { width: 100%; min-height: 45px; }
-        .pyramid-level.level-2 { width: 85%; min-height: 45px; }
-        .pyramid-level.level-3 { width: 70%; min-height: 45px; }
-        .pyramid-level.level-4 { width: 55%; min-height: 45px; }
-        .pyramid-level.level-5 { width: 42%; min-height: 45px; }
-        .pyramid-level.level-6 { width: 28%; min-height: 40px; }
-        .pyramid-level.level-7 { width: 18%; min-height: 40px; }
+        .pyramid-level.level-1 { width: 100%; min-height: 28px; }
+        .pyramid-level.level-2 { width: 85%; min-height: 28px; }
+        .pyramid-level.level-3 { width: 70%; min-height: 28px; }
+        .pyramid-level.level-4 { width: 55%; min-height: 28px; }
+        .pyramid-level.level-5 { width: 42%; min-height: 28px; }
+        .pyramid-level.level-6 { width: 28%; min-height: 25px; }
+        .pyramid-level.level-7 { width: 18%; min-height: 25px; }
         
         .pyramid-level:hover {
             transform: translateY(-5px);
@@ -229,46 +229,73 @@
         
         .level-title {
             font-weight: 700;
-            font-size: 0.75em;
-            margin-bottom: 3px;
+            font-size: 0.7em;
+            margin-bottom: 2px;
             color: var(--text-dark);
-            line-height: 1.2;
+            line-height: 1.1;
         }
         
         .level-subtitle {
-            font-size: 0.65em;
+            font-size: 0.6em;
             color: #666;
-            margin-bottom: 5px;
-            line-height: 1.1;
+            margin-bottom: 3px;
+            line-height: 1;
+        }
+        
+        .drag-game-layout {
+            display: grid;
+            grid-template-columns: 1fr 300px;
+            gap: 30px;
+            align-items: start;
+        }
+        
+        .pyramid-container {
+            width: 100%;
+        }
+        
+        .food-items-sidebar {
+            position: sticky;
+            top: 20px;
         }
         
         .food-items {
             display: flex;
-            flex-wrap: wrap;
+            flex-direction: column;
             gap: 10px;
-            justify-content: center;
-            margin-top: 30px;
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .food-items-title {
+            font-weight: 700;
+            font-size: 1.1em;
+            color: var(--text-dark);
+            margin-bottom: 10px;
+            text-align: center;
         }
         
         .food-item {
             background: linear-gradient(135deg, var(--primary) 0%, var(--warning) 100%);
             color: white;
-            padding: 6px 12px;
-            border-radius: 15px;
+            padding: 12px 15px;
+            border-radius: 12px;
             cursor: grab;
             font-weight: 600;
             transition: all 0.3s ease;
             box-shadow: 0 3px 10px rgba(0,0,0,0.2);
             user-select: none;
-            display: inline-flex;
+            display: flex;
             align-items: center;
-            justify-content: center;
-            gap: 4px;
-            font-size: 0.85em;
+            justify-content: flex-start;
+            gap: 10px;
+            font-size: 0.9em;
+            width: 100%;
         }
         
         .food-item:hover {
-            transform: translateY(-5px) rotate(2deg);
+            transform: translateX(-5px);
             box-shadow: var(--shadow-hover);
         }
         
@@ -283,16 +310,16 @@
         }
         
         .drop-zone {
-            min-height: 35px;
+            min-height: 25px;
             border: 2px dashed transparent;
             border-radius: 8px;
-            padding: 5px;
+            padding: 3px;
             transition: all 0.3s ease;
             flex-grow: 1;
             width: 100%;
             display: flex;
             flex-wrap: wrap;
-            gap: 5px;
+            gap: 4px;
             justify-content: center;
             align-content: flex-start;
         }
@@ -475,22 +502,33 @@
             h1 { font-size: 1.5em; margin-top: 50px; }
             .container { padding: 20px; }
             .mode-card { padding: 20px; }
+            .drag-game-layout {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            .food-items-sidebar {
+                position: relative;
+                top: 0;
+            }
+            .food-items {
+                padding: 15px;
+            }
             .pyramid { 
                 max-width: 100%;
             }
             .pyramid-level { 
-                font-size: 0.8em;
-                padding: 8px 10px;
+                font-size: 0.75em;
+                padding: 4px 8px;
             }
-            .pyramid-level.level-1 { width: 100%; min-height: 40px; }
-            .pyramid-level.level-2 { width: 85%; min-height: 40px; }
-            .pyramid-level.level-3 { width: 70%; min-height: 40px; }
-            .pyramid-level.level-4 { width: 56%; min-height: 40px; }
-            .pyramid-level.level-5 { width: 43%; min-height: 40px; }
-            .pyramid-level.level-6 { width: 30%; min-height: 38px; }
-            .pyramid-level.level-7 { width: 20%; min-height: 38px; }
-            .level-title { font-size: 0.7em; }
-            .level-subtitle { font-size: 0.6em; }
+            .pyramid-level.level-1 { width: 100%; min-height: 25px; }
+            .pyramid-level.level-2 { width: 85%; min-height: 25px; }
+            .pyramid-level.level-3 { width: 70%; min-height: 25px; }
+            .pyramid-level.level-4 { width: 56%; min-height: 25px; }
+            .pyramid-level.level-5 { width: 43%; min-height: 25px; }
+            .pyramid-level.level-6 { width: 30%; min-height: 23px; }
+            .pyramid-level.level-7 { width: 20%; min-height: 23px; }
+            .level-title { font-size: 0.65em; }
+            .level-subtitle { font-size: 0.55em; }
             .food-item { font-size: 0.85em; padding: 8px 12px; }
             .back-button {
                 left: 20px;
@@ -530,7 +568,7 @@
         <div class="game-area" id="dragMode">
             <div class="score-bar">
                 <span>🏆 Punkte: <span id="dragScore">0</span></span>
-                <span>✅ Richtig: <span id="dragCorrect">0</span>/15</span>
+                <span>✅ Richtig: <span id="dragCorrect">0</span>/36</span>
             </div>
             
             <div class="info-box">
@@ -538,72 +576,80 @@
                 Je weiter unten, desto mehr solltest du davon essen.
             </div>
             
-            <div class="pyramid" id="pyramid">
-                <!-- Stufe 7: Süsses & Snacks (Spitze) -->
-                <div class="pyramid-row">
-                    <div class="pyramid-level level-7 drop-zone" data-level="7">
-                        <div class="level-title">🍰 Süsses & Snacks (optional)</div>
-                        <div class="level-subtitle">0-1 Portion am Tag</div>
-                        <div class="drop-zone" data-level="7"></div>
+            <div class="drag-game-layout">
+                <div class="pyramid-container">
+                    <div class="pyramid" id="pyramid">
+                        <!-- Stufe 7: Süsses & Snacks (Spitze) -->
+                        <div class="pyramid-row">
+                            <div class="pyramid-level level-7 drop-zone" data-level="7">
+                                <div class="level-title">🍰 Süsses & Snacks (optional)</div>
+                                <div class="level-subtitle">0-1 Portion am Tag</div>
+                                <div class="drop-zone" data-level="7"></div>
+                            </div>
+                        </div>
+                        
+                        <!-- Stufe 6: Nüsse & Samen -->
+                        <div class="pyramid-row">
+                            <div class="pyramid-level level-6 drop-zone" data-level="6">
+                                <div class="level-title">🌰 Nüsse & Samen</div>
+                                <div class="level-subtitle">1 Handvoll am Tag</div>
+                                <div class="drop-zone" data-level="6"></div>
+                            </div>
+                        </div>
+                        
+                        <!-- Stufe 5: Protein -->
+                        <div class="pyramid-row">
+                            <div class="pyramid-level level-5 drop-zone" data-level="5">
+                                <div class="level-title">🥚 Protein (Eier, Fleisch, Hülsenfrüchte)</div>
+                                <div class="level-subtitle">1 Portion am Tag</div>
+                                <div class="drop-zone" data-level="5"></div>
+                            </div>
+                        </div>
+                        
+                        <!-- Stufe 4: Milchprodukte -->
+                        <div class="pyramid-row">
+                            <div class="pyramid-level level-4 drop-zone" data-level="4">
+                                <div class="level-title">🥛 Milchprodukte</div>
+                                <div class="level-subtitle">2-3 Portionen am Tag</div>
+                                <div class="drop-zone" data-level="4"></div>
+                            </div>
+                        </div>
+                        
+                        <!-- Stufe 3: Getreide & Kartoffeln -->
+                        <div class="pyramid-row">
+                            <div class="pyramid-level level-3 drop-zone" data-level="3">
+                                <div class="level-title">🍞 Getreide & Kartoffeln</div>
+                                <div class="level-subtitle">3 Portionen am Tag</div>
+                                <div class="drop-zone" data-level="3"></div>
+                            </div>
+                        </div>
+                        
+                        <!-- Stufe 2: Gemüse & Früchte -->
+                        <div class="pyramid-row">
+                            <div class="pyramid-level level-2 drop-zone" data-level="2">
+                                <div class="level-title">🥦 Gemüse & Früchte</div>
+                                <div class="level-subtitle">5 Portionen am Tag</div>
+                                <div class="drop-zone" data-level="2"></div>
+                            </div>
+                        </div>
+                        
+                        <!-- Stufe 1: Getränke (Basis) -->
+                        <div class="pyramid-row">
+                            <div class="pyramid-level level-1 drop-zone" data-level="1">
+                                <div class="level-title">🚰 Getränke</div>
+                                <div class="level-subtitle">1-2 Liter am Tag</div>
+                                <div class="drop-zone" data-level="1"></div>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 
-                <!-- Stufe 6: Nüsse & Samen -->
-                <div class="pyramid-row">
-                    <div class="pyramid-level level-6 drop-zone" data-level="6">
-                        <div class="level-title">🌰 Nüsse & Samen</div>
-                        <div class="level-subtitle">1 Handvoll am Tag</div>
-                        <div class="drop-zone" data-level="6"></div>
-                    </div>
-                </div>
-                
-                <!-- Stufe 5: Protein -->
-                <div class="pyramid-row">
-                    <div class="pyramid-level level-5 drop-zone" data-level="5">
-                        <div class="level-title">🥚 Protein (Eier, Fleisch, Hülsenfrüchte)</div>
-                        <div class="level-subtitle">1 Portion am Tag</div>
-                        <div class="drop-zone" data-level="5"></div>
-                    </div>
-                </div>
-                
-                <!-- Stufe 4: Milchprodukte -->
-                <div class="pyramid-row">
-                    <div class="pyramid-level level-4 drop-zone" data-level="4">
-                        <div class="level-title">🥛 Milchprodukte</div>
-                        <div class="level-subtitle">2-3 Portionen am Tag</div>
-                        <div class="drop-zone" data-level="4"></div>
-                    </div>
-                </div>
-                
-                <!-- Stufe 3: Getreide & Kartoffeln -->
-                <div class="pyramid-row">
-                    <div class="pyramid-level level-3 drop-zone" data-level="3">
-                        <div class="level-title">🍞 Getreide & Kartoffeln</div>
-                        <div class="level-subtitle">3 Portionen am Tag</div>
-                        <div class="drop-zone" data-level="3"></div>
-                    </div>
-                </div>
-                
-                <!-- Stufe 2: Gemüse & Früchte -->
-                <div class="pyramid-row">
-                    <div class="pyramid-level level-2 drop-zone" data-level="2">
-                        <div class="level-title">🥦 Gemüse & Früchte</div>
-                        <div class="level-subtitle">5 Portionen am Tag</div>
-                        <div class="drop-zone" data-level="2"></div>
-                    </div>
-                </div>
-                
-                <!-- Stufe 1: Getränke (Basis) -->
-                <div class="pyramid-row">
-                    <div class="pyramid-level level-1 drop-zone" data-level="1">
-                        <div class="level-title">🚰 Getränke</div>
-                        <div class="level-subtitle">1-2 Liter am Tag</div>
-                        <div class="drop-zone" data-level="1"></div>
+                <div class="food-items-sidebar">
+                    <div class="food-items" id="foodItems">
+                        <div class="food-items-title">🎯 Lebensmittel zuordnen</div>
                     </div>
                 </div>
             </div>
-            
-            <div class="food-items" id="foodItems"></div>
             
             <div class="button-group">
                 <button class="btn btn-secondary" onclick="showModes()">🏠 Zurück</button>
@@ -663,21 +709,52 @@
         
         // Lebensmittel für Drag & Drop
         const foodData = [
+            // Getränke (Level 1)
             { name: 'Hahnenwasser', emoji: '💧', level: 1 },
             { name: 'Mineralwasser', emoji: '🥤', level: 1 },
+            { name: 'Ungesüsster Tee', emoji: '🍵', level: 1 },
+            
+            // Gemüse & Früchte (Level 2)
             { name: 'Äpfel', emoji: '🍎', level: 2 },
             { name: 'Karotten', emoji: '🥕', level: 2 },
             { name: 'Broccoli', emoji: '🥦', level: 2 },
+            { name: 'Bananen', emoji: '🍌', level: 2 },
+            { name: 'Tomaten', emoji: '🍅', level: 2 },
+            { name: 'Salat', emoji: '🥗', level: 2 },
+            { name: 'Erdbeeren', emoji: '🍓', level: 2 },
+            
+            // Getreide & Kartoffeln (Level 3)
             { name: 'Vollkornbrot', emoji: '🍞', level: 3 },
             { name: 'Teigwaren', emoji: '🍝', level: 3 },
             { name: 'Kartoffeln', emoji: '🥔', level: 3 },
+            { name: 'Reis', emoji: '🍚', level: 3 },
+            { name: 'Haferflocken', emoji: '🥣', level: 3 },
+            
+            // Milchprodukte (Level 4)
             { name: 'Joghurt', emoji: '🥛', level: 4 },
             { name: 'Käse', emoji: '🧀', level: 4 },
+            { name: 'Quark', emoji: '🍶', level: 4 },
+            
+            // Protein (Level 5)
             { name: 'Eier', emoji: '🥚', level: 5 },
             { name: 'Poulet', emoji: '🍗', level: 5 },
+            { name: 'Fisch', emoji: '🐟', level: 5 },
             { name: 'Linsen', emoji: '🫘', level: 5 },
+            { name: 'Tofu', emoji: '🥙', level: 5 },
+            
+            // Nüsse & Samen (Level 6)
             { name: 'Baumnüsse', emoji: '🌰', level: 6 },
-            { name: 'Schokolade', emoji: '🍫', level: 7 }
+            { name: 'Mandeln', emoji: '🥜', level: 6 },
+            
+            // Süsses & Snacks (Level 7)
+            { name: 'Schokolade', emoji: '🍫', level: 7 },
+            { name: 'Chips', emoji: '🥔', level: 7 },
+            { name: 'Gummibärchen', emoji: '🍬', level: 7 },
+            { name: 'Cola', emoji: '🥤', level: 7 },
+            { name: 'Red Bull', emoji: '🥫', level: 7 },
+            { name: 'Kuchen', emoji: '🍰', level: 7 },
+            { name: 'Cookies', emoji: '🍪', level: 7 },
+            { name: 'Glacé', emoji: '🍨', level: 7 }
         ];
         
         // Quiz-Fragen
@@ -807,7 +884,7 @@
             shuffled.forEach((food, index) => {
                 const item = document.createElement('div');
                 item.className = 'food-item';
-                item.innerHTML = `<span style="font-size: 1.2em;">${food.emoji}</span><span>${food.name}</span>`;
+                item.innerHTML = `<span style="font-size: 1.4em;">${food.emoji}</span><span>${food.name}</span>`;
                 item.draggable = true;
                 item.dataset.level = food.level;
                 item.dataset.index = index;
